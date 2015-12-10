@@ -1,0 +1,35 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block body %}
+
+<div class="row">
+   <div class="col-md-7 col-md-push-5">
+       <h1>
+           <a class="imgLink" href="{{ url('country', {'countryCode': player.team.code}) }}" title="{{ player.team.name }}">
+               <img height="50" width="50" alt="{{ player.team.name }}" title="{{ player.team.name }}"
+                    src="{{ player.team.logo }}">
+           </a>
+           {{ player.team.name }}
+       </h1>
+
+       <h2 class="featurette-heading">{{ player.FirstName }} {{ player.LastName }}
+           <span class="text-muted">({{ player.Age|date("m.d.Y") }})</span>
+       </h2>
+       <p class="lead">
+           <br>
+           <b>Position:</b> {{ player.Position }} <br>
+           <b>Statistic:</b> {{ player.Statistic }} goals <br>
+           <b>Biography:</b> {{ player.Biography }} <br>
+       </p>
+   </div>
+   <div class="col-md-5 col-md-pull-7">
+       <img class="featurette-image img-responsive center-block"
+            data-src="holder.js/400x400/auto" alt="{{ player.FirstName }} {{ player.LastName }}"
+            title="{{ player.FirstName }} {{ player.LastName }}"
+            src="{{ player.Photo }}" data-holder-rendered="true">
+   </div>
+</div>
+
+<hr>
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block body %}
+
+    <a class="imgLink" href="{{ url('country', {'countryCode': team.name}) }}" title="{{ team.name }}">
+        <img height="50" width="50" alt="{{ team.name }}" title="{{ team.name }}"
+             src="/images/{{ team.name }}.png">
+    </a>
+
+    <div class="page-header">
+        <h1>{{ team.name }} SQUAD</h1>
+    </div>
+
+    {{ team.description }}
+
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Player</th>
+                <th>Age</th>
+                <th>Position</th>
+                <th>Statistic (goals)</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for squad in team.players %}
+                <tr>
+                    <td><a href="{{ url('player', {'team': team.name, 'playerId': squad.id}) }}">
+                            {{ squad.FirstName }} {{ squad.LastName }}
+                        </a>
+                    </td>
+                    <td>{{ squad.Age|date("m.d.Y") }}</td>
+                    <td>{{ squad.Position }}</td>
+                    <td>{{ squad.Statistic }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <hr>
+
+{% endblock %}

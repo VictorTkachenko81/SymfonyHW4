@@ -1,0 +1,23 @@
+{
+  "name": "html",
+  "description": "Symfony HW2",
+  "main": "index.js",
+  "authors": [
+    "Victor Tkachenko"
+  ],
+  "license": "BSD-2-Clause",
+  "homepage": "https://github.com/VictorTkachenko81/SymfonyHW2",
+  "moduleType": [
+    "amd"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.6"
+  }
+}
