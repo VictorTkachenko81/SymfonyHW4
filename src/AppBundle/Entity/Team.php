@@ -59,7 +59,7 @@ class Team
     /**
      * @ORM\OneToMany(targetEntity="Player", mappedBy="team", cascade={"persist"})
      */
-    protected $players;
+    private $players;
 
     public function __construct()
     {

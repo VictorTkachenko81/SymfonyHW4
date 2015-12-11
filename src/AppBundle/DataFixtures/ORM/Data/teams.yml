@@ -6,3 +6,14 @@ AppBundle\Entity\Team:
         description: <text($maxNbChars = 400)>
         country: @country<current()>
         players: 10x @player*
+
+AppBundle\Entity\Player:
+    player{1..100}:
+        firstName: <firstNameMale()>
+        lastName: <lastName()>
+        position: <position()>
+        statistic: <randomDigit()>
+        age: <dateTimeBetween($startDate = '-35 years', $endDate = '-20 years')>
+        biography: <text($maxNbChars = 400)>
+        photo: <imageUrl($width = 400, $height = 400, 'people')>
+        team: @team*
