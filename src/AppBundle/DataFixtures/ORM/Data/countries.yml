@@ -1,0 +1,6 @@
+AppBundle\Entity\Country:
+    country{1..10}:
+        name (unique): <countryName()>
+        code: @country<current()>->name
+        photo: <imageUrl($width = 400, $height = 400, 'city')>
+        description: <text($maxNbChars = 400)>

@@ -57,7 +57,7 @@ class Team
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Player", mappedBy="team")
+     * @ORM\OneToMany(targetEntity="Player", mappedBy="team", cascade={"persist"})
      */
     protected $players;
 
