@@ -35,7 +35,7 @@ class GameScore
     private $game;
 
     /**
-     * @ORM\OneToOne(targetEntity="Team")
+     * @ORM\ManyToOne(targetEntity="Team", inversedBy="gameScore")
      * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
      */
     private $team;
@@ -50,6 +50,7 @@ class GameScore
     {
         return $this->id;
     }
+
 
     /**
      * Set score
@@ -74,7 +75,6 @@ class GameScore
     {
         return $this->score;
     }
-
 
     /**
      * Set game

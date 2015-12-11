@@ -55,15 +55,21 @@ class Team
      */
     private $logo;
 
-
     /**
-     * @ORM\OneToMany(targetEntity="Player", mappedBy="team", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Player", mappedBy="team")
      */
     private $players;
+
+    /**
+     * @ORM\OneToMany(targetEntity="GameScore", mappedBy="team")
+     */
+    private $gameScore;
+
 
     public function __construct()
     {
         $this->players = new ArrayCollection();
+        $this->gameScore = new ArrayCollection();
     }
 
 
@@ -229,5 +235,40 @@ class Team
     public function getCountry()
     {
         return $this->country;
+    }
+
+
+    /**
+     * Add gameScore
+     *
+     * @param \AppBundle\Entity\GameScore $gameScore
+     *
+     * @return Team
+     */
+    public function addGameScore(\AppBundle\Entity\GameScore $gameScore)
+    {
+        $this->gameScore[] = $gameScore;
+
+        return $this;
+    }
+
+    /**
+     * Remove gameScore
+     *
+     * @param \AppBundle\Entity\GameScore $gameScore
+     */
+    public function removeGameScore(\AppBundle\Entity\GameScore $gameScore)
+    {
+        $this->gameScore->removeElement($gameScore);
+    }
+
+    /**
+     * Get gameScore
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGameScore()
+    {
+        return $this->gameScore;
     }
 }

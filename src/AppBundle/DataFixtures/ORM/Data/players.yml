@@ -3,8 +3,8 @@ AppBundle\Entity\Player:
         firstName: <firstNameMale()>
         lastName: <lastName()>
         position: <position()>
-        statistic: <randomDigit()>
+        statistic: <current()> #huck
         age: <dateTimeBetween($startDate = '-35 years', $endDate = '-20 years')>
         biography: <text($maxNbChars = 400)>
         photo: <imageUrl($width = 400, $height = 400, 'people')>
-        team: @team*
+        team: @team<count($statistic, 10)> #huck

@@ -1,43 +1,23 @@
 <?php
-/**
- * https://github.com/nelmio/alice#table-of-contents
- * https://github.com/nelmio/alice/blob/master/doc/customizing-data-generation.md#custom-faker-data-providers
- * https://github.com/Etheriq/Alice/blob/ShowResult/src/AppBundle/DataFixtures/ORM/FixturesLoader.php
- * в setUp
-    $this->runCommand(['command' => 'doctrine:schema:update', '--force' => true]);
-    $this->runCommand(['command' => 'hautelook_alice:fixtures:load', '--no-interaction' => true]);
-    в tearDown
-    $this->runCommand(['command' => 'doctrine:schema:drop', '--force' => true]);
- */
 
 namespace AppBundle\DataFixtures\ORM;
 
-use Hautelook\AliceBundle\Doctrine\DataFixtures\AbstractLoader;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\FixtureInterface;
+use Nelmio\Alice\Fixtures;
 
-class FixturesLoader extends AbstractLoader
+class FixturesLoader implements FixtureInterface
 {
-    /**
-     * Returns an array of file paths to fixtures
-     *
-     * @return array<string>
-     */
-    public function getFixtures()
+
+    public function load(ObjectManager $manager)
     {
-//        $env = $this->container->get('kernel')->getEnvironment();
-//        if ($env == 'test') {
-//            return [
-//                __DIR__ . '/DataForTests/tags.yml',
-//                __DIR__ . '/DataForTests/categories.yml',
-//                __DIR__ . '/DataForTests/users.yml',
-//            ];
-//        }
-        return [
-            __DIR__ . '/Data/countries.yml',
-            __DIR__ . '/Data/teams.yml',
-//            __DIR__ . '/Data/players.yml',
-            __DIR__ . '/Data/games.yml',
-        ];
+        Fixtures::load(__DIR__ . '/Data/countries.yml', $manager, ['providers' => [$this]]);
+        Fixtures::load(__DIR__ . '/Data/teams.yml', $manager, ['providers' => [$this]]);
+        Fixtures::load(__DIR__ . '/Data/players.yml', $manager, ['providers' => [$this]]);
+        Fixtures::load(__DIR__ . '/Data/games.yml', $manager, ['providers' => [$this]]);
+        Fixtures::load(__DIR__ . '/Data/scores.yml', $manager, ['providers' => [$this]]);
     }
+
 
     public function countryName()
     {
@@ -81,5 +61,31 @@ class FixturesLoader extends AbstractLoader
         ];
 
         return $positions[array_rand($positions)];
+    }
+
+    /**
+     * @param $count
+     * @param $step
+     * @return int  $newCount+1 every $step
+     */
+    public function count($count, $step)
+    {
+        $newCount = is_int($count/$step)? $count/$step : ceil($count/$step);
+
+        return $newCount;
+    }
+
+    /**
+     * @param $count
+     * @param $max
+     * @return int if count odd return unique odd else return unique even
+     */
+    public function unique($count, $max)
+    {
+        $faker = \Faker\Factory::create();
+        $unique = $faker->numberBetween(1, $max);
+        $newCount = $count&1 ? ($unique&1 ? $unique : $unique - 1) : ($unique&1 ? ($unique < $max ? $unique + 1 : $unique - 1) : $unique);
+
+        return $newCount;
     }
 }
