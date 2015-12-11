@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Doctrine\ORM\EntityManager;
 
 class DefaultController extends Controller
 {
@@ -43,9 +44,19 @@ class DefaultController extends Controller
      */
     public function teamAction($teamName)
     {
-        $team = $this->getDoctrine()
-            ->getRepository('AppBundle:Team')
-            ->findOneByCode($teamName);
+        //29 запросов - 20мс
+//        $team = $this->getDoctrine()
+//            ->getRepository('AppBundle:Team')
+//            ->findOneByCode($teamName);
+
+        //28 запросов - 18мс
+        $em = $this->getDoctrine()->getManager();
+        $team = $em->getRepository("AppBundle:Team")
+            ->getTeamWithPlayers($teamName);
+
+        //3 запроса - 2,5мс  как так?????
+        $games = $em->getRepository("AppBundle:Game")
+            ->getTeamGames();
 
         return ['team' => $team];
     }
