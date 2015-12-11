@@ -40,6 +40,57 @@
         </table>
     </div>
 
+
+    <div class="page-header">
+        <h1>{{ team.name }} Games</h1>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Team</th>
+                <th>Score</th>
+                <th>Team</th>
+                <th>Round</th>
+                <th>Referee</th>
+                <th>Stadium</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for games in team.gameScore %}
+                <tr>
+                    {% set team_1 = '' %}
+                    {% set result_1 = '' %}
+                    {% set team_2 = '' %}
+                    {% set result_2 = '' %}
+
+                    {% for key, result in games.game.scores %}
+                        {% if key == 0 %}
+                            {% set team_1 = result.team.name %}
+                            {% set result_1 = result.score %}
+                        {% else %}
+                            {% set team_2 = result.team.name %}
+                            {% set result_2 = result.score %}
+                        {% endif %}
+                    {% endfor %}
+
+                    <td align="center">{{ team_1 }}</td>
+                    <td align="center">{{ result_1 }} : {{ result_2 }}</td>
+                    <td align="center">{{ team_2 }}</td>
+                    <td>{{ games.game.round }}</td>
+                    <td>{{ games.game.referee }}</td>
+                    <td>{{ games.game.stadium }}</td>
+                    <td>{{ games.game.gamedate|date("m.d.Y") }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {#{{ dump() }}#}
+
     <hr>
 
 {% endblock %}
