@@ -238,7 +238,6 @@ class Team
         return $this->country;
     }
 
-
     /**
      * Add gameScore
      *

@@ -16,8 +16,9 @@ class TeamRepository extends EntityRepository
     public function getTeamWithPlayers($teamName)
     {
         return $this->createQueryBuilder('t')
-            ->select('t, c, p')
-            ->leftjoin('t.country', 'c')
+            ->select('t, c, p, gs')
+            ->leftjoin('t.gameScore', 'gs')
+            ->join('t.country', 'c')
             ->join('t.players', 'p')
             ->where('t.name = ?1')
             ->setParameter(1, $teamName)

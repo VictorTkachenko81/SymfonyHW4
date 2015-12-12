@@ -49,16 +49,21 @@ class DefaultController extends Controller
 //            ->getRepository('AppBundle:Team')
 //            ->findOneByCode($teamName);
 
-        //28 запросов - 18мс
+        //3 запроса - 3,5мс
         $em = $this->getDoctrine()->getManager();
         $team = $em->getRepository("AppBundle:Team")
             ->getTeamWithPlayers($teamName);
 
-        //3 запроса - 2,5мс  как так?????
         $games = $em->getRepository("AppBundle:Game")
-            ->getTeamGames();
+            ->getTeamGames($team);
 
-        return ['team' => $team];
+        $gamesData = $em->getRepository("AppBundle:Game")
+            ->getScores($games);
+
+        return [
+            'team' => $team,
+            'games' => $gamesData
+        ];
     }
 
     /**

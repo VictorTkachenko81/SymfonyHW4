@@ -59,14 +59,14 @@
             </tr>
             </thead>
             <tbody>
-            {% for games in team.gameScore %}
+            {% for game in games %}
                 <tr>
                     {% set team_1 = '' %}
                     {% set result_1 = '' %}
                     {% set team_2 = '' %}
                     {% set result_2 = '' %}
 
-                    {% for key, result in games.game.scores %}
+                    {% for key, result in game.scores %}
                         {% if key == 0 %}
                             {% set team_1 = result.team.name %}
                             {% set result_1 = result.score %}
@@ -76,20 +76,20 @@
                         {% endif %}
                     {% endfor %}
 
-                    <td align="center">{{ team_1 }}</td>
-                    <td align="center">{{ result_1 }} : {{ result_2 }}</td>
-                    <td align="center">{{ team_2 }}</td>
-                    <td>{{ games.game.round }}</td>
-                    <td>{{ games.game.referee }}</td>
-                    <td>{{ games.game.stadium }}</td>
-                    <td>{{ games.game.gamedate|date("m.d.Y") }}</td>
+                    <td>{{ team_1 }}</td>
+                    <td>{{ result_1 }} : {{ result_2 }}</td>
+                    <td>{{ team_2 }}</td>
+                    <td>{{ game.round }}</td>
+                    <td>{{ game.referee }}</td>
+                    <td>{{ game.stadium }}</td>
+                    <td>{{ game.gamedate|date("m.d.Y") }}</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
 
-    {#{{ dump() }}#}
+    {{ dump() }}
 
     <hr>
 

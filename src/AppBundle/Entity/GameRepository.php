@@ -12,14 +12,24 @@ use Doctrine\ORM\EntityRepository;
  */
 class GameRepository extends EntityRepository
 {
-    public function getTeamGames()
+    public function getTeamGames($team)
+    {
+        return $this->createQueryBuilder('g')
+            ->leftjoin('g.scores', 's')
+            ->where('s in (?1)')
+            ->setParameter(1, $team->getGameScore())
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getScores($games)
     {
         return $this->createQueryBuilder('g')
             ->select('g, s, t')
             ->leftjoin('g.scores', 's')
             ->join('s.team', 't')
-//            ->where('t = ?1')
-//            ->setParameter(1, $team)
+            ->where('g in (?1)')
+            ->setParameter(1, $games)
             ->getQuery()
             ->getResult();
     }

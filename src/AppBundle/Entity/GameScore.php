@@ -51,7 +51,6 @@ class GameScore
         return $this->id;
     }
 
-
     /**
      * Set score
      *
