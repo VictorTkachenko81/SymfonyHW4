@@ -14,82 +14,16 @@
     {{ team.description }}
 
 
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Player</th>
-                <th>Age</th>
-                <th>Position</th>
-                <th>Statistic (goals)</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for squad in team.players %}
-                <tr>
-                    <td><a href="{{ url('player', {'team': team.name, 'playerId': squad.id}) }}">
-                            {{ squad.FirstName }} {{ squad.LastName }}
-                        </a>
-                    </td>
-                    <td>{{ squad.Age|date("m.d.Y") }}</td>
-                    <td>{{ squad.Position }}</td>
-                    <td>{{ squad.Statistic }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    {{ include( 'AppBundle:team:squad.html.twig' ) }}
 
 
     <div class="page-header">
         <h1>{{ team.name }} Games</h1>
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Team</th>
-                <th>Score</th>
-                <th>Team</th>
-                <th>Round</th>
-                <th>Referee</th>
-                <th>Stadium</th>
-                <th>Date</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for game in games %}
-                <tr>
-                    {% set team_1 = '' %}
-                    {% set result_1 = '' %}
-                    {% set team_2 = '' %}
-                    {% set result_2 = '' %}
+    {{ include( 'AppBundle:game:games.html.twig' ) }}
 
-                    {% for key, result in game.scores %}
-                        {% if key == 0 %}
-                            {% set team_1 = result.team.name %}
-                            {% set result_1 = result.score %}
-                        {% else %}
-                            {% set team_2 = result.team.name %}
-                            {% set result_2 = result.score %}
-                        {% endif %}
-                    {% endfor %}
-
-                    <td>{{ team_1 }}</td>
-                    <td>{{ result_1 }} : {{ result_2 }}</td>
-                    <td>{{ team_2 }}</td>
-                    <td>{{ game.round }}</td>
-                    <td>{{ game.referee }}</td>
-                    <td>{{ game.stadium }}</td>
-                    <td>{{ game.gamedate|date("m.d.Y") }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    {{ dump() }}
+    {#{{ dump() }}#}
 
     <hr>
 

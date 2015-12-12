@@ -33,4 +33,19 @@ class GameRepository extends EntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function getAllGamesWithDep($page = 1, $max = 10)
+    {
+        $first = $page * $max - $max;
+
+        return $this->createQueryBuilder('g')
+            ->select('g, s, t')
+            ->join('g.scores', 's')
+            ->leftjoin('s.team', 't')
+            ->orderBy('g.gamedate', 'DESC')
+            ->setFirstResult($first)
+            ->setMaxResults($max)
+            ->getQuery();
+//            ->getResult();
+    }
 }

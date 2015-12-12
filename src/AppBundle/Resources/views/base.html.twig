@@ -4,11 +4,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="GeekHub - SymfonyHW3">
+    <meta name="description" content="GeekHub - SymfonyHW4">
     <meta name="author" content="Victor Tkachenko">
     <link rel="icon" href="{{ asset('favicon.ico') }}">
 
-    <title>{% block title %}Symfony HW3{% endblock %}</title>
+    <title>{% block title %}Symfony HW4{% endblock %}</title>
 
     {% block stylesheets %}
         <!-- Bootstrap core CSS -->
@@ -43,7 +43,6 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="{{ url('homepage') }}">European Qualifiers</a></li>
-                <li><a href="{{ url('testDataAdd') }}">Install Test Data</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
@@ -52,6 +51,9 @@
 <div class="container">
 
     {% block body %}{% endblock body %}
+
+    {# margin:300 - чтобы не срабатывал автолоад страниц#}
+    <hr style="margin-top: 300px">
 
     <footer>
         <p>© 2015 Company, Inc.</p>

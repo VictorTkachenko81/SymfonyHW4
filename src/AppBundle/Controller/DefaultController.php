@@ -6,8 +6,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class DefaultController extends Controller
 {
@@ -23,13 +25,31 @@ class DefaultController extends Controller
             ->getRepository('AppBundle:Team')
             ->findAll();
 
+
+        $em = $this->getDoctrine()->getManager();
+        $games = $em->getRepository("AppBundle:Game")
+            ->getAllGamesWithDep();
+
+        $paginator = new Paginator($games, $fetchJoinCollection = true);
+
+        $countResults = count($paginator);
+        $firstResult = $paginator->getQuery()->getFirstResult();
+        $maxResults = $paginator->getQuery()->getMaxResults();
+        $countPages = ceil($countResults / $maxResults);
+        $currentPage = $firstResult / $maxResults + 1;
+
         if (!$teams) {
             throw $this->createNotFoundException(
                 'No teams found'
             );
         }
 
-        return ['teams' => $teams];
+        return [
+            'teams' => $teams,
+            'games' => $paginator,
+            'page'  => $currentPage,
+            'pages' => $countPages,
+        ];
     }
 
     /**
@@ -106,4 +126,37 @@ class DefaultController extends Controller
         return ['player' => $player];
     }
 
+    /**
+     * @Route("/gameList", name="pageGameAjax")
+     * @Method("POST")
+     * @Template("AppBundle:game:gamesList.html.twig")
+     *
+     * @return Response
+     */
+    public function gameAjaxAction()
+    {
+        $request = Request::createFromGlobals();
+        $page = $request->request->get('page');
+
+        $em = $this->getDoctrine()->getManager();
+        $games = $em->getRepository("AppBundle:Game")
+            ->getAllGamesWithDep($page);
+
+        $paginator = new Paginator($games, $fetchJoinCollection = true);
+
+        $countResults = count($paginator);
+        $firstResult = $paginator->getQuery()->getFirstResult();
+        $maxResults = $paginator->getQuery()->getMaxResults();
+        $countPages = ceil($countResults / $maxResults);
+        $currentPage = $firstResult / $maxResults + 1;
+
+        return [
+            'games' => $paginator,
+            'page'  => $currentPage,
+            'pages' => $countPages,
+        ];
+
+//        return new Response($page);
+
+    }
 }
