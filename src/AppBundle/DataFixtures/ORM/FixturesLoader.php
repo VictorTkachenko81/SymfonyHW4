@@ -2,22 +2,36 @@
 
 namespace AppBundle\DataFixtures\ORM;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\DataFixtures\FixtureInterface;
-use Nelmio\Alice\Fixtures;
+use Hautelook\AliceBundle\Doctrine\DataFixtures\AbstractLoader;
 
-class FixturesLoader implements FixtureInterface
+class FixturesLoader extends AbstractLoader
 {
 
-    public function load(ObjectManager $manager)
+    public function getFixtures()
     {
-        Fixtures::load(__DIR__ . '/Data/countries.yml', $manager, ['providers' => [$this]]);
-        Fixtures::load(__DIR__ . '/Data/teams.yml', $manager, ['providers' => [$this]]);
-        Fixtures::load(__DIR__ . '/Data/players.yml', $manager, ['providers' => [$this]]);
-        Fixtures::load(__DIR__ . '/Data/games.yml', $manager, ['providers' => [$this]]);
-        Fixtures::load(__DIR__ . '/Data/scores.yml', $manager, ['providers' => [$this]]);
-    }
+        $kernel = $GLOBALS['kernel'];
+        $env = $kernel->getEnvironment();
+//        $env = $GLOBALS['env'];
 
+        echo "\nEnvironment is: " . $env . "!!!\n\n";
+
+        if ($env == 'test') {
+            return [
+                __DIR__ . '/test/countries.yml',
+                __DIR__ . '/test/teams.yml',
+                __DIR__ . '/test/players.yml',
+                __DIR__ . '/test/games.yml',
+                __DIR__ . '/test/scores.yml',
+            ];
+        }
+        return [
+            __DIR__ . '/dev/countries.yml',
+            __DIR__ . '/dev/teams.yml',
+            __DIR__ . '/dev/players.yml',
+            __DIR__ . '/dev/games.yml',
+            __DIR__ . '/dev/scores.yml',
+        ];
+    }
 
     public function countryName()
     {
@@ -45,6 +59,19 @@ class FixturesLoader implements FixtureInterface
                 'Turkey',
                 'Ukraine',
                 'Wales',
+        ];
+
+        return $names[array_rand($names)];
+    }
+
+    public function countryNameTest()
+    {
+        $names = [
+            'Ukraine',
+            'Ukraine',
+            'Germany',
+            'Ukraine',
+            'Ukraine',
         ];
 
         return $names[array_rand($names)];
