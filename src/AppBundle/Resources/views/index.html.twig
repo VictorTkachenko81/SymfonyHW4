@@ -24,8 +24,8 @@
 
     {{ include( 'AppBundle:game:games.html.twig' ) }}
 
-    {#{{ page }}#}
-    {#{{ pages }}#}
+    {% set page = games.currentPage %}
+    {% set pages = games.countPages %}
 
     <div style="text-align: center">
 
@@ -42,6 +42,13 @@
         </ul>
 
         <p><a class="btn btn-default" url="{{ url('pageGameAjax') }}" page="{{ page }}" max="{{ pages }}" role="button" id="more">Show more »</a></p>
+
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" name="auto-load" value="on"> Enable autoload data when scrolling down
+            </label>
+        </div>
+
     </div>
 
     {#{{ dump() }}#}

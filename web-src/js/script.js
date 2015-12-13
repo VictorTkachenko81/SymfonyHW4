@@ -82,7 +82,21 @@ $( document ).ready(function() {
 
     //action for loading addition data when scroll down
     //attention! function has dependency from paginator
+
+    $( "input[name='auto-load']" ).click(function() {
+        if($(this).attr("checked")) {
+            $( this ).removeAttr( "checked");
+            alert('Autoload disable');
+        } else {
+            $( this ).attr( "checked", "checked" );
+            alert('Autoload enable');
+        }
+    });
+
     $( window ).scroll(function() {
+
+        var load = false;
+        if ( $("input[name='auto-load']" ).attr( "checked" ) ) load = true;
 
         var curPosition = $( window ).scrollTop();
         var wHeight = $( window ).height();
@@ -92,7 +106,7 @@ $( document ).ready(function() {
         var maxPage = parseInt($( ".pagination li .loadPage:last" ).text());
         var curPage = parseInt($( ".pagination li.active" ).text());
 
-        if ( (curPage < maxPage) && (toDown == 0)) {
+        if ( (curPage < maxPage) && (toDown == 0) && load ) {
 
             var toPage = curPage + 1;
 

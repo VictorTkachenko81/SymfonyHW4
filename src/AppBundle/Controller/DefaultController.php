@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use AppBundle\Model\PaginatorWithPages;
 
 class DefaultController extends Controller
 {
@@ -30,13 +31,7 @@ class DefaultController extends Controller
         $games = $em->getRepository("AppBundle:Game")
             ->getAllGamesWithDep();
 
-        $paginator = new Paginator($games, $fetchJoinCollection = true);
-
-        $countResults = count($paginator);
-        $firstResult = $paginator->getQuery()->getFirstResult();
-        $maxResults = $paginator->getQuery()->getMaxResults();
-        $countPages = ceil($countResults / $maxResults);
-        $currentPage = $firstResult / $maxResults + 1;
+        $paginator = new PaginatorWithPages($games, $fetchJoinCollection = true);
 
         if (!$teams) {
             throw $this->createNotFoundException(
@@ -47,8 +42,6 @@ class DefaultController extends Controller
         return [
             'teams' => $teams,
             'games' => $paginator,
-            'page'  => $currentPage,
-            'pages' => $countPages,
         ];
     }
 
@@ -142,21 +135,10 @@ class DefaultController extends Controller
         $games = $em->getRepository("AppBundle:Game")
             ->getAllGamesWithDep($page);
 
-        $paginator = new Paginator($games, $fetchJoinCollection = true);
-
-        $countResults = count($paginator);
-        $firstResult = $paginator->getQuery()->getFirstResult();
-        $maxResults = $paginator->getQuery()->getMaxResults();
-        $countPages = ceil($countResults / $maxResults);
-        $currentPage = $firstResult / $maxResults + 1;
+        $paginator = new PaginatorWithPages($games, $fetchJoinCollection = true);
 
         return [
             'games' => $paginator,
-            'page'  => $currentPage,
-            'pages' => $countPages,
         ];
-
-//        return new Response($page);
-
     }
 }
