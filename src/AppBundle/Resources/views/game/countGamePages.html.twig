@@ -1,0 +1,11 @@
+{% if games.query == true %}
+    {% set start = games.query.firstResult %}
+    {% set maxResults = games.query.maxResults %}
+    {% set page = start / maxResults + 1 %}
+    {% set pages = (games.count / maxResults)|round(0, 'ceil') %}
+{% else %}
+    {% set start = 0 %}
+    {% set maxResults = 0 %}
+    {% set page = 1 %}
+    {% set pages = 1 %}
+{% endif %}

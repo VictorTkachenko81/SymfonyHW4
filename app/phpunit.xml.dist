@@ -36,6 +36,7 @@
                 <directory>../src/*/Bundle/*Bundle/Resources</directory>
                 <directory>../src/*/Bundle/*Bundle/Tests</directory>
                 <directory>../src/*/Bundle/*Bundle/DataFixtures</directory>
+                <directory>../src/*/Bundle/*Bundle/Entity</directory>
             </exclude>
         </whitelist>
     </filter>

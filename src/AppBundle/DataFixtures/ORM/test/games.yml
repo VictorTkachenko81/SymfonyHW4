@@ -1,0 +1,7 @@
+AppBundle\Entity\Game:
+    game{1..1}:
+        championship: Euro 2016
+        round: Play off
+        gamedate: <dateTimeBetween($startDate = '-1 years', $endDate = 'now')>
+        referee: <firstNameMale()> <lastName()>
+        stadium: <city()>

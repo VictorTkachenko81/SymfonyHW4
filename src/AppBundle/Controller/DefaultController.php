@@ -6,7 +6,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use AppBundle\Model\PaginatorWithPages;
 
 class DefaultController extends Controller
 {
@@ -22,13 +26,23 @@ class DefaultController extends Controller
             ->getRepository('AppBundle:Team')
             ->findAll();
 
+
+        $em = $this->getDoctrine()->getManager();
+        $games = $em->getRepository("AppBundle:Game")
+            ->getAllGamesWithDep();
+
+        $paginator = new PaginatorWithPages($games, $fetchJoinCollection = true);
+
         if (!$teams) {
             throw $this->createNotFoundException(
                 'No teams found'
             );
         }
 
-        return ['teams' => $teams];
+        return [
+            'teams' => $teams,
+            'games' => $paginator,
+        ];
     }
 
     /**
@@ -43,11 +57,26 @@ class DefaultController extends Controller
      */
     public function teamAction($teamName)
     {
-        $team = $this->getDoctrine()
-            ->getRepository('AppBundle:Team')
-            ->findOneByCode($teamName);
+        //29 запросов - 20мс
+//        $team = $this->getDoctrine()
+//            ->getRepository('AppBundle:Team')
+//            ->findOneByCode($teamName);
 
-        return ['team' => $team];
+        //3 запроса - 3,5мс
+        $em = $this->getDoctrine()->getManager();
+        $team = $em->getRepository("AppBundle:Team")
+            ->getTeamWithPlayers($teamName);
+
+        $games = $em->getRepository("AppBundle:Game")
+            ->getTeamGames($team);
+
+        $gamesData = $em->getRepository("AppBundle:Game")
+            ->getScores($games);
+
+        return [
+            'team' => $team,
+            'games' => $gamesData
+        ];
     }
 
     /**
@@ -90,4 +119,26 @@ class DefaultController extends Controller
         return ['player' => $player];
     }
 
+    /**
+     * @Route("/gameList", name="pageGameAjax")
+     * @Method("POST")
+     * @Template("AppBundle:game:gamesList.html.twig")
+     *
+     * @return Response
+     */
+    public function gameAjaxAction()
+    {
+        $request = Request::createFromGlobals();
+        $page = $request->request->get('page');
+
+        $em = $this->getDoctrine()->getManager();
+        $games = $em->getRepository("AppBundle:Game")
+            ->getAllGamesWithDep($page);
+
+        $paginator = new PaginatorWithPages($games, $fetchJoinCollection = true);
+
+        return [
+            'games' => $paginator,
+        ];
+    }
 }
