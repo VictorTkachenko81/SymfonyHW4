@@ -40,6 +40,12 @@ class GameScore
      */
     private $team;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="side", type="string", length=10)
+     */
+    private $side;
 
     /**
      * Get id
@@ -121,5 +127,29 @@ class GameScore
     public function getTeam()
     {
         return $this->team;
+    }
+
+    /**
+     * Set side
+     *
+     * @param string $side
+     *
+     * @return GameScore
+     */
+    public function setSide($side)
+    {
+        $this->side = $side;
+
+        return $this;
+    }
+
+    /**
+     * Get side
+     *
+     * @return string
+     */
+    public function getSide()
+    {
+        return $this->side;
     }
 }

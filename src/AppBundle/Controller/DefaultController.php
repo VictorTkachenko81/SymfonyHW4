@@ -57,12 +57,6 @@ class DefaultController extends Controller
      */
     public function teamAction($teamName)
     {
-        //29 запросов - 20мс
-//        $team = $this->getDoctrine()
-//            ->getRepository('AppBundle:Team')
-//            ->findOneByCode($teamName);
-
-        //3 запроса - 3,5мс
         $em = $this->getDoctrine()->getManager();
         $team = $em->getRepository("AppBundle:Team")
             ->getTeamWithPlayers($teamName);
@@ -120,15 +114,15 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/gameList", name="pageGameAjax")
+     * @Route("/gameList", name="pageGameAjax", condition="request.isXmlHttpRequest()")
      * @Method("POST")
      * @Template("AppBundle:game:gamesList.html.twig")
      *
+     * @param Request $request
      * @return Response
      */
-    public function gameAjaxAction()
+    public function gameAjaxAction(Request $request)
     {
-        $request = Request::createFromGlobals();
         $page = $request->request->get('page');
 
         $em = $this->getDoctrine()->getManager();

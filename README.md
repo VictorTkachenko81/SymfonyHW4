@@ -12,4 +12,8 @@ Symfony HW4
     - pagination with page numbers
     - pagination with button showMore
     - loading addition data when scroll down
-    
+
+TODO: 
+    - edit tests with run command
+    - edit travis file: delete prepare tests command
+    - add pagination to team page

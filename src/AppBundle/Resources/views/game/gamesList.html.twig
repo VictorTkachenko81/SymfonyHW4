@@ -15,7 +15,7 @@
         {% set result_2 = '' %}
 
         {% for key, result in game.scores %}
-            {% if key == 0 %}
+            {% if result.side == 'host' %}
                 {% set team_1 = result.team.name %}
                 {% set result_1 = result.score %}
             {% else %}

@@ -1,5 +1,5 @@
 AppBundle\Entity\Team:
-    team{1..2}:
+    team{1, 2}:
         code: @country<current()>->name
         name: @country<current()>->name
         logo: /images/<identity($name)>.png
