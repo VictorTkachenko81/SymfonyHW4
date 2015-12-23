@@ -1,0 +1,69 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block body %}
+
+    <div class="page-header">
+        <h1>Country List</h1>
+    </div>
+
+    <div id="formBlock">
+        {{ include( 'AppBundle:admin/form:country.html.twig' ) }}
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-squad">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Country</th>
+                <th>Code</th>
+                <th>Edit</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for key, country in countries %}
+                    <tr>
+                        <td>{{ key + 1 }}</td>
+                        <td>
+                            <a href="{{ url('country', {'countryCode': country.code}) }}">
+                                {{ country.name }}
+                            </a>
+                        </td>
+                        <td>{{ country.code }}</td>
+                        <td>
+                            <a class="edit" href="{{ url('countryEdit', {'countryCode': country.code}) }}">
+                                edit
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $( document ).ready(function() {
+            $( "a.edit" ).click(function(event) {
+                event.preventDefault();
+                    $.ajax({
+                        url: $(this).attr('href'),
+                        dataType: "html",
+                        method: "GET",
+                        statusCode: {
+                            404: function() {
+                                alert( "page not found" );
+                            }
+                        }
+                    }).done(function( html ) {
+                        $( "#formBlock" ).html( html );
+                    });
+            });
+        });
+    </script>
+{% endblock %}

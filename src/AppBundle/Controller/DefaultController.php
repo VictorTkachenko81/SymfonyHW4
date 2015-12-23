@@ -89,6 +89,12 @@ class DefaultController extends Controller
             ->getRepository('AppBundle:Country')
             ->findOneByCode($countryCode);
 
+        if (!$country) {
+            throw $this->createNotFoundException(
+                'No country found'
+            );
+        }
+
         return ['country' => $country];
     }
 
@@ -109,6 +115,12 @@ class DefaultController extends Controller
         $player = $this->getDoctrine()
             ->getRepository('AppBundle:Player')
             ->find($playerId);
+
+        if (!$player) {
+            throw $this->createNotFoundException(
+                'No player found'
+            );
+        }
 
         return ['player' => $player];
     }
