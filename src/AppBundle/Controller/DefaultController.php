@@ -48,7 +48,7 @@ class DefaultController extends Controller
     /**
      * @param $teamName
      * @Route("/team/{teamName}", name="team", requirements={
-     *     "team": "[A-Za-z]+"
+     *     "teamName": "[A-Za-z]+"
      *     })
      * @Method("GET")
      * @Template("AppBundle:team:team.html.twig")
@@ -76,7 +76,7 @@ class DefaultController extends Controller
     /**
      * @param $countryCode
      * @Route("/country/{countryCode}", name="country", requirements={
-     *     "country": "[A-Za-z]+"
+     *     "countryCode": "[A-Za-z]+"
      *     })
      * @Method("GET")
      * @Template("AppBundle:country:country.html.twig")

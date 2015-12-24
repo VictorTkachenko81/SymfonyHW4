@@ -7,7 +7,8 @@
     </div>
 
     <div id="formBlock">
-        {{ include( 'AppBundle:admin/form:country.html.twig' ) }}
+        {#<p><a class="btn btn-default" href="{{ url('countryEdit', {'countryCode': 'new'}) }}" role="button" id="show_add_form">Add new country</a></p>#}
+        <p><a class="btn btn-default" href="{{ url('countryNew') }}" role="button" id="show_add_form">Add new country</a></p>
     </div>
 
     <div class="table-responsive">
@@ -18,6 +19,7 @@
                 <th>Country</th>
                 <th>Code</th>
                 <th>Edit</th>
+                <th>Remove</th>
             </tr>
             </thead>
             <tbody>
@@ -31,8 +33,13 @@
                         </td>
                         <td>{{ country.code }}</td>
                         <td>
-                            <a class="edit" href="{{ url('countryEdit', {'countryCode': country.code}) }}">
+                            <a class="edit" href="{{ url('countryEdit', {'countryCode': country.code, 'action': 'edit'}) }}">
                                 edit
+                            </a>
+                        </td>
+                        <td>
+                            <a class="remove" href="{{ url('countryEdit', {'countryCode': country.code, 'action': 'remove'}) }}">
+                                remove
                             </a>
                         </td>
                     </tr>
@@ -64,6 +71,32 @@
                         $( "#formBlock" ).html( html );
                     });
             });
+
+            $( "a.remove" ).click(function(event) {
+                event.preventDefault();
+                var r = confirm("Are you sure you want to do this?");
+                if (r == true) {
+//                    alert($(this).attr('href'));
+                    window.location.href = $(this).attr('href');
+                }
+            });
+
+            $( "#show_add_form" ).click(function(event) {
+                event.preventDefault();
+                $.ajax({
+                    url: $(this).attr('href'),
+                    dataType: "html",
+                    method: "GET",
+                    statusCode: {
+                        404: function() {
+                            alert( "page not found" );
+                        }
+                    }
+                }).done(function( html ) {
+                    $( "#formBlock" ).html( html ).slideDown("slow");
+                });
+            });
+
         });
     </script>
 {% endblock %}

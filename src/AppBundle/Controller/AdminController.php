@@ -24,23 +24,54 @@ class AdminController extends Controller
      /**
      * @Route("/country", name="adminCountry")
      * @Template("AppBundle:admin:country.html.twig")
-     * @Method({"GET", "POST"})
+     * @Method("GET")
      *
-     * @param Request $request
      * @return Response
      */
-    public function createCountryAction(Request $request)
+    public function countryAction()
     {
         $countries = $this->getDoctrine()
             ->getRepository('AppBundle:Country')
             ->findAll();
 
-        $country = new Country();
+        return [
+            'countries' => $countries,
+        ];
+    }
+
+    /**
+     * @param $countryCode
+     * @param $action
+     * @param Request $request
+     * @Route("/country/new", name="countryNew", defaults={"countryCode": "new", "action": "new"})
+     * @Route("/country/{countryCode}/{action}", name="countryEdit", requirements={
+     *     "countryCode": "[A-Za-z]+",
+     *     "action": "new|edit|remove"
+     *     })
+     * @Method({"GET", "POST"})
+     * @Template("AppBundle:admin/form:country.html.twig")
+     *
+     * @return Response
+     */
+    public function editCountryAction($countryCode, $action, Request $request)
+    {
         $em = $this->getDoctrine()->getManager();
+        if ($action == "new") $country = new Country();
+        else {
+            $country = $em->getRepository('AppBundle:Country')
+                ->findOneByCode($countryCode);
+        }
+
+        if ($action == "remove") {
+            $em->remove($country);
+            $em->flush();
+
+            return $this->redirectToRoute('adminCountry');
+        }
 
         $form = $this->createForm(CountryType::class, $country, [
             'em' => $em,
-            'action' => $this->generateUrl('adminCountry'),
+            'action' => $this->generateUrl('countryEdit', ['countryCode' => $countryCode, 'action' => $action]),
             'method' => Request::METHOD_POST,
         ]);
 
@@ -50,60 +81,17 @@ class AdminController extends Controller
                 $em->persist($country);
                 $em->flush();
 
-                return $this->redirectToRoute('adminSuccess');
+                return $this->redirectToRoute('adminCountry');
             }
         }
 
         return [
-            'countries' => $countries,
-            'form'      => $form->createView(),
+            'form' => $form->createView(),
         ];
     }
 
-
     /**
-     * @param $countryCode
-     * @Route("/country/{countryCode}", name="countryEdit", requirements={
-     *     "country": "[A-Za-z]+"
-     *     })
-     * @Method("GET")
-     * @Template("AppBundle:admin/form:country.html.twig")
-     *
-     * @return Response
-     */
-    public function editCountryAction($countryCode)
-    {
-        $country = $this->getDoctrine()
-            ->getRepository('AppBundle:Country')
-            ->findOneByCode($countryCode);
-
-//        $em = $this->getDoctrine()->getManager();
-//        $country = $em->getRepository('AppBundle:Country')->find($id);
-//        $em->flush();
-
-        if (!$country) {
-            throw $this->createNotFoundException(
-                'No country found'
-            );
-        }
-        else {
-            $em = $this->getDoctrine()->getManager();
-
-            $form = $this->createForm(CountryType::class, $country, [
-                'em' => $em,
-                'action' => $this->generateUrl('adminCountry'),
-                'method' => Request::METHOD_POST,
-            ]);
-
-            return [
-                'form' => $form->createView(),
-            ];
-        }
-
-    }
-
-    /**
-     * @Route("/country/success", name="adminSuccess")
+     * @Route("/success", name="adminSuccess")
      * @Template("AppBundle:admin:success.html.twig")
      *
      * @return Response
