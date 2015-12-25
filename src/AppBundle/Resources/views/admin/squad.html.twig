@@ -1,0 +1,59 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block body %}
+
+<img height="50" width="50" alt="{{ team.name }}" title="{{ team.name }}"
+     src="{{ team.logo }}">
+
+<div class="page-header">
+    <h1>{{ team.name }} Players List</h1>
+</div>
+
+<p><a class="btn btn-sm btn-default" href="{{ url('playerNew') }}" role="button" id="show_add_form">Add new player</a></p>
+
+<div id="formBlock"></div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-squad">
+        <thead>
+        <tr>
+            <th>Player</th>
+            <th>Age</th>
+            <th>Position</th>
+            <th>Statistic (goals)</th>
+            <th>Edit</th>
+            <th>Remove</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for squad in team.players %}
+                <tr>
+                    <td><a href="{{ url('player', {'team': team.name, 'playerId': squad.id}) }}">
+                            {{ squad.FirstName }} {{ squad.LastName }}
+                        </a>
+                    </td>
+                    <td>{{ squad.Age|date("m.d.Y") }}</td>
+                    <td>{{ squad.Position }}</td>
+                    <td>{{ squad.Statistic }}</td>
+                    <td>
+                        <a class="edit" href="{{ url('playerEdit', {'playerId': squad.id}) }}">
+                            edit
+                        </a>
+                    </td>
+                    <td>
+                        <a class="remove" href="{{ url('playerRemove', {'playerId': squad.id}) }}">
+                            remove
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/script.js') }}"></script>
+{% endblock %}

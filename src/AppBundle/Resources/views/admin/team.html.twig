@@ -35,9 +35,9 @@
                         <td>{{ team.code }}</td>
                         <td>{{ team.country.name }}</td>
                         <td>
-                            {#<a class="edit" href="{{ url('adminSquad', {'teamCode': team.code}) }}">#}
+                            <a class="squad" href="{{ url('adminSquad', {'teamCode': team.code}) }}">
                                 edit
-                            {#</a>#}
+                            </a>
                         </td>
                         <td>
                             <a class="edit" href="{{ url('teamEdit', {'teamCode': team.code}) }}">
