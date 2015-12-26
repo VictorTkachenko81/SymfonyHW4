@@ -1,0 +1,20 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block body %}
+
+    <div class="page-header">
+        <h1>Games List</h1>
+    </div>
+
+    <p><a class="btn btn-sm btn-default" href="{{ url('gameNew') }}" role="button" id="show_add_form">Add new game</a></p>
+
+    <div id="formBlock"></div>
+
+    {{ include( 'AppBundle:game:games.html.twig' ) }}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/script.js') }}"></script>
+{% endblock %}
