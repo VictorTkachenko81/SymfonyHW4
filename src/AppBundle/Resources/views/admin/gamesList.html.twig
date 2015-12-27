@@ -1,0 +1,46 @@
+
+{#{% if games.query == true %}#}
+{% if false %}
+    {% set start = games.query.firstResult %}
+{% else %}
+    {% set start = 0 %}
+{% endif %}
+
+
+{% for countGame, game in games %}
+    <tr>
+        {% set team_1 = '' %}
+        {% set result_1 = '' %}
+        {% set team_2 = '' %}
+        {% set result_2 = '' %}
+
+        {% for key, result in game.scores %}
+            {% if result.side == 'host' %}
+                {% set team_1 = result.team.name %}
+                {% set result_1 = result.score %}
+            {% else %}
+                {% set team_2 = result.team.name %}
+                {% set result_2 = result.score %}
+            {% endif %}
+        {% endfor %}
+
+        <td>{{ start + countGame + 1 }}</td>
+        <td>{{ team_1 }}</td>
+        <td>{{ result_1 }} : {{ result_2 }}</td>
+        <td>{{ team_2 }}</td>
+        <td>{{ game.round }}</td>
+        <td>{{ game.referee }}</td>
+        <td>{{ game.stadium }}</td>
+        <td>{{ game.gamedate|date("m.d.Y") }}</td>
+        <td>
+            <a class="edit" href="{{ url('gameEdit', {'id': game.id}) }}">
+                edit
+            </a>
+        </td>
+        <td>
+            <a class="remove" href="{{ url('gameRemove', {'id': game.id}) }}">
+                remove
+            </a>
+        </td>
+    </tr>
+{% endfor %}

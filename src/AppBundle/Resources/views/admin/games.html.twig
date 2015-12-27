@@ -10,7 +10,27 @@
 
     <div id="formBlock"></div>
 
-    {{ include( 'AppBundle:game:games.html.twig' ) }}
+    <div class="table-responsive">
+        <table class="table table-striped table-games">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Team</th>
+                <th>Score</th>
+                <th>Team</th>
+                <th>Round</th>
+                <th>Referee</th>
+                <th>Stadium</th>
+                <th>Date</th>
+                <th>Edit</th>
+                <th>Remove</th>
+            </tr>
+            </thead>
+            <tbody>
+                {{ include( 'AppBundle:admin:gamesList.html.twig' ) }}
+            </tbody>
+        </table>
+    </div>
 
 {% endblock %}
 

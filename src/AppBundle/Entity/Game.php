@@ -59,7 +59,7 @@ class Game
     private $stadium;
 
     /**
-     * @ORM\OneToMany(targetEntity="GameScore", mappedBy="game", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="GameScore", mappedBy="game", cascade={"persist", "remove"})
      */
     private $scores;
 
@@ -208,7 +208,7 @@ class Game
     public function addScore(GameScore $score)
     {
         $score->setGame($this);
-        $this->scores[] = $score;
+        $this->scores[$score->getSide()] = $score;
 
         return $this;
     }

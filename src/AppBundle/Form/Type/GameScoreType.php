@@ -6,6 +6,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -28,14 +29,7 @@ class GameScoreType extends AbstractType
                 'placeholder' => 'Choose team',
                 'empty_data'  => null
             ))
-            ->add('side', ChoiceType::class, array(
-                'choices' => [
-                    'host' => 'host',
-                    'guest' => 'guest',
-                ],
-                'choices_as_values' => true,
-                'attr' => array('readonly' => true),
-            ))
+            ->add('side', HiddenType::class)
             ->add('score', IntegerType::class);
     }
 

@@ -35,6 +35,7 @@ class GameType extends AbstractType
                 'choices_as_values' => true,
             ))
             ->add('gamedate', DateType::class, array(
+                'label'  => 'Date',
                 'input'  => 'datetime',
                 'widget' => 'choice',
                 'years'  => range(2015, 2020),
@@ -52,6 +53,7 @@ class GameType extends AbstractType
         $resolver->setDefaults([
             'data_class' => 'AppBundle\Entity\Game',
             'em' => null,
+            'label' => 'NewScoreLabel'
         ]);
     }
 

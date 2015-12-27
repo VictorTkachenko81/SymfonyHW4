@@ -83,4 +83,65 @@ class GameController extends Controller
         ];
     }
 
+
+
+    /**
+     * @param $id
+     * @param Request $request
+     * @Route("/game/{id}/edit", name="gameEdit")
+     * @Method({"GET", "POST"})
+     * @Template("AppBundle:admin/form:game.html.twig")
+     *
+     * @return Response
+     */
+    public function editGameAction($id, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $game = $em->getRepository("AppBundle:Game")
+            ->find($id);
+
+        $form = $this->createForm(GameType::class, $game, [
+            'em'     => $em,
+            'action' => $this->generateUrl('gameEdit', ['id' => $id]),
+            'method' => Request::METHOD_POST,
+        ])
+            ->add('save', SubmitType::class, array('label' => 'Save'));
+
+        if ($request->getMethod() == 'POST') {
+            $form->handleRequest($request);
+            if ($form->isValid()) {
+                $em->persist($game);
+                $em->flush();
+
+                return $this->redirectToRoute('adminGames');
+            }
+        }
+
+        return [
+            'form' => $form->createView(),
+        ];
+    }
+
+
+    /**
+     * @param $id
+     * @Route("/game/{id}/remove", name="gameRemove", requirements={
+     *     "id": "\d+"
+     *     })
+     * @Method("GET")
+     * @Template("AppBundle:admin/form:game.html.twig")
+     *
+     * @return Response
+     */
+    public function removeGameAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $game = $em->getRepository('AppBundle:Game')
+            ->find($id);
+
+        $em->remove($game);
+        $em->flush();
+
+        return $this->redirectToRoute('adminGames');
+    }
 }
