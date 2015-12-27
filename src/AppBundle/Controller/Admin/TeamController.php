@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -52,10 +53,11 @@ class TeamController extends Controller
         $team = new Team();
 
         $form = $this->createForm(TeamType::class, $team, [
-            'em' => $em,
-            'action' => $this->generateUrl('teamNew'),
-            'method' => Request::METHOD_POST,
-        ]);
+                'em' => $em,
+                'action' => $this->generateUrl('teamNew'),
+                'method' => Request::METHOD_POST,
+            ])
+            ->add('save', SubmitType::class, array('label' => 'Save'));
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
@@ -90,10 +92,11 @@ class TeamController extends Controller
             ->findOneByCode($teamCode);
 
         $form = $this->createForm(TeamType::class, $team, [
-            'em' => $em,
-            'action' => $this->generateUrl('teamEdit', ['teamCode' => $teamCode]),
-            'method' => Request::METHOD_POST,
-        ]);
+                'em' => $em,
+                'action' => $this->generateUrl('teamEdit', ['teamCode' => $teamCode]),
+                'method' => Request::METHOD_POST,
+            ])
+            ->add('save', SubmitType::class, array('label' => 'Save'));
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);

@@ -27,8 +27,7 @@ class CountryType extends AbstractType
             ->add('name', TextType::class)
             ->add('code', TextType::class)
             ->add('photo', TextType::class)
-            ->add('description', TextareaType::class)
-            ->add('save', SubmitType::class, array('label' => 'Save'));
+            ->add('description', TextareaType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
