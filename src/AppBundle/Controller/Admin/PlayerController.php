@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -52,10 +53,11 @@ class PlayerController extends Controller
         $player = new Player();
 
         $form = $this->createForm(PlayerType::class, $player, [
-            'em' => $em,
-            'action' => $this->generateUrl('playerNew'),
-            'method' => Request::METHOD_POST,
-        ]);
+                'em' => $em,
+                'action' => $this->generateUrl('playerNew'),
+                'method' => Request::METHOD_POST,
+            ])
+            ->add('save', SubmitType::class, array('label' => 'Save'));
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
@@ -91,10 +93,11 @@ class PlayerController extends Controller
             ->find($playerId);
 
         $form = $this->createForm(PlayerType::class, $player, [
-            'em' => $em,
-            'action' => $this->generateUrl('playerEdit', ['playerId' => $playerId]),
-            'method' => Request::METHOD_POST,
-        ]);
+                'em' => $em,
+                'action' => $this->generateUrl('playerEdit', ['playerId' => $playerId]),
+                'method' => Request::METHOD_POST,
+            ])
+            ->add('save', SubmitType::class, array('label' => 'Save'));
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);

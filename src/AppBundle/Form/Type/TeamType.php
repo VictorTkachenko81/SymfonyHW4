@@ -24,10 +24,10 @@ class TeamType extends AbstractType
             ->add('country', EntityType::class, array(
                 'class' => 'AppBundle:Country',
                 'choice_label' => 'name',
+                'placeholder' => 'Choose country',
             ))
             ->add('logo', TextType::class)
-            ->add('description', TextareaType::class)
-            ->add('save', SubmitType::class, array('label' => 'Save'));
+            ->add('description', TextareaType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

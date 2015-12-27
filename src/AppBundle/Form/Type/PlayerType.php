@@ -48,9 +48,7 @@ class PlayerType extends AbstractType
                 'years'  => range(1950, 2010),
             ))
             ->add('biography', TextareaType::class)
-            ->add('photo', TextType::class)
-
-            ->add('save', SubmitType::class, array('label' => 'Save'));
+            ->add('photo', TextType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

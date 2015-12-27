@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -52,10 +53,11 @@ class CountryController extends Controller
         $country = new Country();
 
         $form = $this->createForm(CountryType::class, $country, [
-            'em' => $em,
-            'action' => $this->generateUrl('countryNew'),
-            'method' => Request::METHOD_POST,
-        ]);
+                'em' => $em,
+                'action' => $this->generateUrl('countryNew'),
+                'method' => Request::METHOD_POST,
+            ])
+            ->add('save', SubmitType::class, array('label' => 'Save'));
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
@@ -90,10 +92,11 @@ class CountryController extends Controller
             ->findOneByCode($countryCode);
 
         $form = $this->createForm(CountryType::class, $country, [
-            'em' => $em,
-            'action' => $this->generateUrl('countryEdit', ['countryCode' => $countryCode]),
-            'method' => Request::METHOD_POST,
-        ]);
+                'em' => $em,
+                'action' => $this->generateUrl('countryEdit', ['countryCode' => $countryCode]),
+                'method' => Request::METHOD_POST,
+            ])
+            ->add('save', SubmitType::class, array('label' => 'Save'));
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
