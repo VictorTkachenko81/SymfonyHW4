@@ -9,7 +9,10 @@ use AppBundle\Model\PaginatorWithPages;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,8 +38,32 @@ class GameController extends Controller
 
         $paginator = new PaginatorWithPages($games, $fetchJoinCollection = true);
 
+//        In Progress
+//        $data = $paginator->getQuery()->getResult();
+//
+//        $form = $this->createFormBuilder(new Game())
+//            ->add('id', CollectionType::class, array(
+//                    'entry_type'   => ChoiceType::class,
+//                    'entry_options'  => array(
+//                        'choices' => $data,
+//                    ),
+//                )
+//            )
+//            ->add('id', ChoiceType::class, array(
+//                    'choices' => $data,
+//                )
+//            )
+//            ->add('id', EntityType::class, array(
+//                    'class' => 'AppBundle:Game',
+//                    'choices' => $data,
+//                )
+//            )
+//            ->add('delete', SubmitType::class, array('label' => 'Delete'))
+//            ->getForm();
+
         return [
             'games' => $paginator,
+//            'delete' => $form->createView(),
         ];
     }
 
@@ -55,7 +82,7 @@ class GameController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $game = new Game();
-//        $game->setGamedate();
+        $game->setGamedate(new \DateTime('now'));
         $score['host'] = new GameScore();
         $score['guest'] = new GameScore();
         $game->addScore($score['host']->setSide('host'));

@@ -1,2 +1,12 @@
 {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
-{{ form(form) }}
+{#{{ form(form) }}#}
+{{ form_start(form) }}
+    {{ form_row(form.championship) }}
+    {{ form_row(form.round) }}
+    {{ form_row(form.gamedate) }}
+    {{ form_row(form.referee) }}
+    {{ form_row(form.stadium) }}
+    {{ form_row(form.scores.0, {'name': form.scores.0.side.vars.value}) }}
+    {{ form_row(form.scores.1, {'name': form.scores.1.side.vars.value}) }}
+{{ form_end(form) }}
+{#{{ dump() }}#}

@@ -53,7 +53,6 @@ class GameType extends AbstractType
         $resolver->setDefaults([
             'data_class' => 'AppBundle\Entity\Game',
             'em' => null,
-            'label' => 'NewScoreLabel'
         ]);
     }
 

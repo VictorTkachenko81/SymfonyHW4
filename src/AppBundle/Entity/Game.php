@@ -208,7 +208,7 @@ class Game
     public function addScore(GameScore $score)
     {
         $score->setGame($this);
-        $this->scores[$score->getSide()] = $score;
+        $this->scores[] = $score;
 
         return $this;
     }
