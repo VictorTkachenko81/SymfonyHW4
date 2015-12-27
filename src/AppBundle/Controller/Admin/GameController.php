@@ -38,32 +38,8 @@ class GameController extends Controller
 
         $paginator = new PaginatorWithPages($games, $fetchJoinCollection = true);
 
-//        In Progress
-//        $data = $paginator->getQuery()->getResult();
-//
-//        $form = $this->createFormBuilder(new Game())
-//            ->add('id', CollectionType::class, array(
-//                    'entry_type'   => ChoiceType::class,
-//                    'entry_options'  => array(
-//                        'choices' => $data,
-//                    ),
-//                )
-//            )
-//            ->add('id', ChoiceType::class, array(
-//                    'choices' => $data,
-//                )
-//            )
-//            ->add('id', EntityType::class, array(
-//                    'class' => 'AppBundle:Game',
-//                    'choices' => $data,
-//                )
-//            )
-//            ->add('delete', SubmitType::class, array('label' => 'Delete'))
-//            ->getForm();
-
         return [
             'games' => $paginator,
-//            'delete' => $form->createView(),
         ];
     }
 
