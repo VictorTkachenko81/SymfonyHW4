@@ -6,6 +6,7 @@ use AppBundle\Entity\Game;
 use AppBundle\Entity\GameScore;
 use AppBundle\Form\Type\GameType;
 use AppBundle\Model\PaginatorWithPages;
+use AppBundle\Model\RemoveFormCreator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -25,12 +26,13 @@ class GameController extends Controller
 {
 
     /**
+     * @param Request $request
      * @Route("/games", name="adminGames")
      * @Template("AppBundle:admin:games.html.twig")
      *
      * @return Response
      */
-    public function gamesAction()
+    public function gamesAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $games = $em->getRepository("AppBundle:Game")
@@ -39,31 +41,54 @@ class GameController extends Controller
         $paginator = new PaginatorWithPages($games, $fetchJoinCollection = true);
 
 //        In Progress
-//        $data = $paginator->getQuery()->getResult();
-//
-//        $form = $this->createFormBuilder(new Game())
+        $gamesData = $paginator->getQuery()->getResult();
+        $data = new RemoveFormCreator();
+        $dd = $data->getData($gamesData);
+
+        $gamesForm = $games->getResult();
+
+        $form = $this->createFormBuilder($gamesForm)
+            ->setAction($this->generateUrl('adminGames'))
+            ->setMethod('POST')
 //            ->add('id', CollectionType::class, array(
+////
+//
 //                    'entry_type'   => ChoiceType::class,
 //                    'entry_options'  => array(
-//                        'choices' => $data,
+//                        'em' => $em,
+//                        'entry_class' => 'AppBundle\Entity\Game',
+//                        'choices' => $gamesData,
 //                    ),
 //                )
 //            )
-//            ->add('id', ChoiceType::class, array(
-//                    'choices' => $data,
-//                )
-//            )
+            ->add('id', ChoiceType::class, array(
+                    'choices'           => $gamesForm,
+                    'multiple'          => true,
+                    'expanded'          => true,
+                    'choices_as_values' => true,
+                )
+            )
 //            ->add('id', EntityType::class, array(
 //                    'class' => 'AppBundle:Game',
-//                    'choices' => $data,
+//                    'choices' => $dd,
 //                )
 //            )
-//            ->add('delete', SubmitType::class, array('label' => 'Delete'))
-//            ->getForm();
+            ->add('delete', SubmitType::class, array('label' => 'Delete'))
+            ->getForm();
+
+        if ($request->getMethod() == 'POST') {
+            $form->handleRequest($request);
+            if ($form->isValid()) {
+                $em->remove($gamesForm);
+//                $em->flush();
+                $xx = $gamesForm;
+                return $this->redirectToRoute('adminGames');
+            }
+        }
 
         return [
             'games' => $paginator,
-//            'delete' => $form->createView(),
+            'delete' => $form->createView(),
         ];
     }
 
