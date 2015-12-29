@@ -5,14 +5,11 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Entity\Game;
 use AppBundle\Entity\GameScore;
 use AppBundle\Form\Type\GameType;
-use AppBundle\Model\PaginatorWithPages;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,21 +22,54 @@ class GameController extends Controller
 {
 
     /**
+     * @param Request $request
      * @Route("/games", name="adminGames")
      * @Template("AppBundle:admin:games.html.twig")
      *
      * @return Response
      */
-    public function gamesAction()
+    public function gamesAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $games = $em->getRepository("AppBundle:Game")
-            ->getAllGamesWithDep();
+            ->getGamesWithDep(1, 20);
 
-        $paginator = new PaginatorWithPages($games, $fetchJoinCollection = true);
+        $form = $this->createFormBuilder($games)
+            ->setAction($this->generateUrl('adminGames'))
+            ->setMethod('POST')
+            ->add('games', ChoiceType::class, array(
+                    'choices' => $games,
+                    'choices_as_values' => true,
+                    'expanded' => true,
+                    'multiple' => true,
+                    'choice_value' => 'id',
+                    'label' => false,
+                    'choice_label' => 'id',
+                )
+            )
+            ->add('delete', SubmitType::class, array(
+                'label' => 'Remove',
+                'attr' => [
+                    'class' => 'btn btn-xs btn-danger'
+                ],))
+            ->getForm();
+
+        if ($request->getMethod() == 'POST') {
+            $form->handleRequest($request);
+            if ($form->isValid()) {
+                $data = $form->getData();
+                foreach ($data['games'] as $game) {
+                    $em->remove($game);
+                }
+                $em->flush();
+
+                return $this->redirectToRoute('adminGames');
+            }
+        }
 
         return [
-            'games' => $paginator,
+            'games' => $games,
+            'delete' => $form->createView(),
         ];
     }
 
