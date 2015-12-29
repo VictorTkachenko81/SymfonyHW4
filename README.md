@@ -11,7 +11,8 @@ HomeWork - #5
     1. Added forms for adding and updating records
 
     2. Removal records occurs via get method
-        - removal via forms will be later (in progress)
+
+    3. Added form for removal records with checkboxes (only for games)
 
 
 HomeWork - #4
