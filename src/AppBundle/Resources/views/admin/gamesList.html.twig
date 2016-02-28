@@ -6,7 +6,7 @@
     {% set start = 0 %}
 {% endif %}
 
-
+{{ form_start(delete) }}
 {% for countGame, game in games %}
     <tr>
         {% set team_1 = '' %}
@@ -25,12 +25,37 @@
         {% endfor %}
 
         <td>{{ start + countGame + 1 }}</td>
+        <td>{{ game.id }}</td>
         <td>{{ team_1 }}</td>
         <td>{{ result_1 }} : {{ result_2 }}</td>
         <td>{{ team_2 }}</td>
         <td>{{ game.round }}</td>
         <td>{{ game.referee }}</td>
         <td>{{ game.stadium }}</td>
-        <td>{{ game.gamedate|date("m.d.Y") }}</td>
+        <td>{{ game.gamedate|date("d.m.Y") }}</td>
+        <td>
+            <a class="edit" href="{{ url('gameEdit', {'id': game.id}) }}">
+                edit
+            </a>
+        </td>
+        <td>
+            <a class="remove" href="{{ url('gameRemove', {'id': game.id}) }}">
+                remove
+            </a>
+        </td>
+        <td style="text-align: center">
+            {{ form_widget(attribute(delete.games, countGame)) }}
+        </td>
     </tr>
+
 {% endfor %}
+    <tr>
+        <td colspan="11"></td>
+        <td style="text-align: center">
+            {{ form_end(delete) }}
+        </td>
+    </tr>
+
+
+    {#{{ form(delete) }}#}
+    {#{{ dump() }}#}

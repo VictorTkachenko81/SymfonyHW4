@@ -130,6 +130,35 @@ $( document ).ready(function() {
             }, 1000);
         }
     });
+
+
+    //action for adding forms to page
+    $( "a.edit, #show_add_form" ).click(function(event) {
+        event.preventDefault();
+        $.ajax({
+            url         : $(this).attr('href'),
+            dataType    : "html",
+            method      : "GET",
+            statusCode  : {
+                404: function() {
+                    alert( "page not found" );
+                }
+            }
+        }).done(function( html ) {
+            $( "#formBlock" ).html( html ).slideDown();
+        });
+    });
+
+
+    //confirm message for removing record
+    $( "a.remove" ).click(function(event) {
+        event.preventDefault();
+        var r = confirm("Are you sure you want to do this?");
+        if (r == true) {
+            window.location.href = $(this).attr('href');
+        }
+    });
+
 });
 
 

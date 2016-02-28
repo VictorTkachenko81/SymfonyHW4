@@ -33,9 +33,10 @@ class FixturesLoader extends AbstractLoader
         ];
     }
 
-    public function countryName()
+    public function countryName($count)
     {
         $names = [
+                'Ukraine',
                 'Albania',
                 'Austria',
                 'Croatia',
@@ -57,24 +58,10 @@ class FixturesLoader extends AbstractLoader
                 'Sweden',
                 'Switzerland',
                 'Turkey',
-                'Ukraine',
                 'Wales',
         ];
 
-        return $names[array_rand($names)];
-    }
-
-    public function countryNameTest()
-    {
-        $names = [
-            'Ukraine',
-            'Ukraine',
-            'Germany',
-            'Ukraine',
-            'Ukraine',
-        ];
-
-        return $names[array_rand($names)];
+        return $names[$count-1];
     }
 
     public function position()
@@ -90,6 +77,16 @@ class FixturesLoader extends AbstractLoader
         return $positions[array_rand($positions)];
     }
 
+    public function side($count)
+    {
+        $side = [
+            'host',
+            'guest',
+        ];
+
+        return $side[$count&1 ? 0 : 1];
+    }
+
     /**
      * @param $count
      * @param $step
@@ -97,7 +94,7 @@ class FixturesLoader extends AbstractLoader
      */
     public function count($count, $step)
     {
-        $newCount = is_int($count/$step)? $count/$step : ceil($count/$step);
+        $newCount = ceil($count/$step);
 
         return $newCount;
     }
@@ -111,7 +108,14 @@ class FixturesLoader extends AbstractLoader
     {
         $faker = \Faker\Factory::create();
         $unique = $faker->numberBetween(1, $max);
-        $newCount = $count&1 ? ($unique&1 ? $unique : $unique - 1) : ($unique&1 ? ($unique < $max ? $unique + 1 : $unique - 1) : $unique);
+        $newCount = $count&1 ?
+            ($unique&1 ?
+                $unique :
+                $unique - 1) :
+            ($unique&1 ? (
+                $unique < $max ?
+                $unique + 1 : $unique - 1) :
+                $unique);
 
         return $newCount;
     }

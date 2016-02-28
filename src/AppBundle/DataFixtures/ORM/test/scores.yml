@@ -1,5 +1,6 @@
 AppBundle\Entity\GameScore:
     score{1..2}:
-        score: <current()> #huck
-        game: @game<count($score, 2)> #huck only 2 records must be the same
-        team: @team<unique($score, 2)> #huck for unique
+        score: <randomDigit()>
+        game: @game1
+        team: @team<current()>
+        side: <side($fake('current'))>

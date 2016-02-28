@@ -1,0 +1,82 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block body %}
+
+    <div class="page-header">
+        <h1>Country List</h1>
+    </div>
+
+    <p><a class="btn btn-sm btn-default" href="{{ url('countryNew') }}" role="button" id="show_add_form">Add new country</a></p>
+
+    <div id="formBlock"></div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-squad">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Country</th>
+                <th>Code</th>
+                <th>Edit</th>
+                <th>Remove</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for key, country in countries %}
+                    <tr>
+                        <td>{{ key + 1 }}</td>
+                        <td>
+                            <a href="{{ url('country', {'countryCode': country.code}) }}">
+                                {{ country.name }}
+                            </a>
+                        </td>
+                        <td>{{ country.code }}</td>
+                        <td>
+                            <a class="edit" href="{{ url('countryEdit', {'countryCode': country.code}) }}">
+                                edit
+                            </a>
+                        </td>
+                        <td>
+                            <a class="remove" href="{{ url('countryRemove', {'countryCode': country.code}) }}">
+                                remove
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/script.js') }}"></script>
+    <script>
+        $( document ).ready(function() {
+
+            $( "#formBlock" ).on( "submit", "form", function( event ) {
+                event.preventDefault();
+
+                var $form = $( this );
+                var values = {};
+                $.each( $form.serializeArray(), function(i, field) {
+                    values[field.name] = field.value;
+                });
+
+                $.ajax({
+                    type        : $form.attr( 'method' ),
+                    url         : $form.attr( 'action' ),
+                    data        : values,
+                    success     : function( html ) {
+                        //Have some problems with top menu after replacing block
+                        //$( "#formBlock" ).html( html );
+                        window.location.href = '{{ url('adminCountry') }}';
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

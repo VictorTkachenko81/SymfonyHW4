@@ -48,7 +48,7 @@ class DefaultController extends Controller
     /**
      * @param $teamName
      * @Route("/team/{teamName}", name="team", requirements={
-     *     "team": "[A-Za-z]+"
+     *     "teamName": "[A-Za-z]+"
      *     })
      * @Method("GET")
      * @Template("AppBundle:team:team.html.twig")
@@ -57,12 +57,6 @@ class DefaultController extends Controller
      */
     public function teamAction($teamName)
     {
-        //29 запросов - 20мс
-//        $team = $this->getDoctrine()
-//            ->getRepository('AppBundle:Team')
-//            ->findOneByCode($teamName);
-
-        //3 запроса - 3,5мс
         $em = $this->getDoctrine()->getManager();
         $team = $em->getRepository("AppBundle:Team")
             ->getTeamWithPlayers($teamName);
@@ -82,7 +76,7 @@ class DefaultController extends Controller
     /**
      * @param $countryCode
      * @Route("/country/{countryCode}", name="country", requirements={
-     *     "country": "[A-Za-z]+"
+     *     "countryCode": "[A-Za-z]+"
      *     })
      * @Method("GET")
      * @Template("AppBundle:country:country.html.twig")
@@ -94,6 +88,12 @@ class DefaultController extends Controller
         $country = $this->getDoctrine()
             ->getRepository('AppBundle:Country')
             ->findOneByCode($countryCode);
+
+        if (!$country) {
+            throw $this->createNotFoundException(
+                'No country found'
+            );
+        }
 
         return ['country' => $country];
     }
@@ -116,19 +116,25 @@ class DefaultController extends Controller
             ->getRepository('AppBundle:Player')
             ->find($playerId);
 
+        if (!$player) {
+            throw $this->createNotFoundException(
+                'No player found'
+            );
+        }
+
         return ['player' => $player];
     }
 
     /**
-     * @Route("/gameList", name="pageGameAjax")
+     * @Route("/gameList", name="pageGameAjax", condition="request.isXmlHttpRequest()")
      * @Method("POST")
      * @Template("AppBundle:game:gamesList.html.twig")
      *
+     * @param Request $request
      * @return Response
      */
-    public function gameAjaxAction()
+    public function gameAjaxAction(Request $request)
     {
-        $request = Request::createFromGlobals();
         $page = $request->request->get('page');
 
         $em = $this->getDoctrine()->getManager();

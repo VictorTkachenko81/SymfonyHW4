@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use AppBundle\Entity\GameScore;
 
 /**
  * Game
@@ -58,7 +59,7 @@ class Game
     private $stadium;
 
     /**
-     * @ORM\OneToMany(targetEntity="GameScore", mappedBy="game")
+     * @ORM\OneToMany(targetEntity="GameScore", mappedBy="game", cascade={"persist", "remove"})
      */
     private $scores;
 
@@ -200,12 +201,13 @@ class Game
     /**
      * Add score
      *
-     * @param \AppBundle\Entity\GameScore $score
+     * @param GameScore $score
      *
      * @return Game
      */
-    public function addScore(\AppBundle\Entity\GameScore $score)
+    public function addScore(GameScore $score)
     {
+        $score->setGame($this);
         $this->scores[] = $score;
 
         return $this;
@@ -214,9 +216,9 @@ class Game
     /**
      * Remove score
      *
-     * @param \AppBundle\Entity\GameScore $score
+     * @param GameScore $score
      */
-    public function removeScore(\AppBundle\Entity\GameScore $score)
+    public function removeScore(GameScore $score)
     {
         $this->scores->removeElement($score);
     }
